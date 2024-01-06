@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@{
+    Layout = null;
+}
+@inject UserManager<User> userManager
+@model List<User>
+
+<div class="table-responsive mb-5">
+    <table class="table table-bordered text-center mb-0">
+        <thead class="bg-secondary text-dark">
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Roles</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (var user in Model)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                var rolesString = string.Join(", ", roles);
+                rolesString = string.IsNullOrEmpty(rolesString) ? "None" : rolesString;
+                <tr>
+                    <td class="align-middle">@user.Firstname</td>
+                    <td class="align-middle">@user.Lastname</td>
+                    <td class="align-middle">@user.UserName</td>
+                    <td class="align-middle">@user.City.Country.Name</td>
+                    <td class="align-middle">@user.City.Name</td>
+                    <td class="align-middle">@user.Address</td>
+                    <td class="align-middle">@rolesString</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

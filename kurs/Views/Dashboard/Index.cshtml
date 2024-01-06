@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Home - Dashboard";
+}
+@inject DatabaseContext context;
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Dashboard</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/account">Account</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Dashboard</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <div class="text-center mb-2 pb-2">
+                <h2 class="section-title px-5 mb-3"><span class="px-2">Statistics</span></h2>
+                <p>Shop sales statistics</p>
+                <div class="row">
+                    <div class="col mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                Quantity of products sold
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title text-right mb-0">@context.Orders.SelectMany(x => x.Products).Sum(x => x.Amount)</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                Sold for a total of
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title text-right mb-0">$@context.Orders.ToList().Sum(x => x.TotalPrice()).ToString("F")</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Orders
+                    <span class="badge badge-primary badge-pill">@context.Orders.Count()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Products
+                    <span class="badge badge-primary badge-pill">@context.Products.Count()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Companies
+                    <span class="badge badge-primary badge-pill">@context.Companies.Count()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Users
+                    <span class="badge badge-primary badge-pill">@context.Users.Count()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Reviews
+                    <span class="badge badge-primary badge-pill">@context.Reviews.Count()</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container-fluid bg-secondary my-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-6 col-12 py-5">
+            <div class="text-center ">
+                <h2 class="section-title px-5 mb-3"><span class="bg-secondary px-2">Backups</span></h2>
+                <p>Click the button to create a backup.</p>
+                <button onclick="backup();" class="btn btn-primary" style="width: 9em;">Backup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container" class="container-fluid">
+    
+</div>
+
+
+@section Scripts {
+    <script>
+        loadBackups = function () {
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/backups",
+                success: function(res){
+                    $("#container").html(res)
+                }
+            })
+        }
+        var backup = function () {
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/Backup",
+                success: function(){
+                    loadBackups()
+                    $.notify("Backup has been successfully added", {
+                        globalPosition: 'top center',
+                        showDuration: 700,
+                        className: "success"
+                    });
+                }
+            })
+        }
+        var restore = function (filename) {
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/Restore",
+                data: {
+                    filename: filename
+                },
+                success: function () {
+                    $.notify("The database has been restored", {
+                        globalPosition: 'top center',
+                        showDuration: 700,
+                        className: "success"
+                    });
+                }
+            })
+        }
+        var deleteBackup = function (filename) {
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/DeleteBackup",
+                data: {
+                    filename: filename
+                },
+                success: function () {
+                    loadBackups()
+                    $.notify("The backup has been deleted", {
+                        globalPosition: 'top center',
+                        showDuration: 700,
+                        className: "warn"
+                    });
+                }
+            })
+        }
+
+        $(document).ready(loadBackups)
+    </script>
+}

@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+@model Order
+
+<table class="table table-borderless text-center mb-0">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Price</th>
+            <th scope="col">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderProduct in Model.Products)
+        {
+            <tr>
+                <th style="text-align: left !important;" scope="row"><img style="width: 28px; height: 28px; object-fit: cover;" src="@orderProduct.Product.Images.First().ImagePath" /> @orderProduct.Product.Name</th>
+                <td>$@orderProduct.Product.Price.ToString("F")</td>
+                <td>@orderProduct.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="d-flex justify-content-between mt-3">
+    <span>Shipping:</span>
+    <span>$@Model.Shipping.Price.ToString("F")</span>
+</div>
+<div class="d-flex justify-content-between mt-1">
+    <span>Total Price:</span>
+    <span>$@Model.Products.Sum(x => x.Product.Price * x.Amount).ToString("F")</span>
+</div>

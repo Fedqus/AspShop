@@ -1,0 +1,23 @@
+﻿@using kurs.Models.Forms;
+@{
+    Layout = null;
+}
+@model TagForm
+<form asp-action="Edit" asp-controller="Tags" enctype="multipart/form-data" onsubmit="return AjaxPost(this);">
+    <div asp-validation-summary="All" hidden></div>
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <input type="text" asp-for="Name" class="form-control" placeholder="Name">
+    </div>
+    <span asp-validation-for="TagGroupId" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <select class="custom-select" asp-for="TagGroupId">
+            <option selected>Choose a Category</option>
+            @foreach (TagGroup tagGroup in ViewBag.TagGroups)
+            {
+                <option value="@tagGroup.Id">@tagGroup.Name</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Save</button>
+</form>

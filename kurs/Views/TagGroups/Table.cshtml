@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+@model List<TagGroup>
+<div class="table-responsive mb-5">
+    <table class="table table-bordered text-center mb-0">
+        <thead class="bg-secondary text-dark">
+            <tr>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (var tagGroup in Model)
+            {
+                <tr>
+                    <td class="align-middle">@tagGroup.Name</td>
+                    <td class="align-middle">
+                        <div class="d-flex justify-content-center">
+                            <button onclick="showInPopup('@Url.Action("Edit", "TagGroups", new { id = tagGroup.Id })', 'Edit Tag Group')" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></button>
+                            <button onclick="AjaxDelete('@Url.Action("Delete", "TagGroups", new { id = tagGroup.Id })')" class="btn btn-sm btn-primary" style="width: 32px"><i class="fa fa-times"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

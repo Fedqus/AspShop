@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+@model List<Review>
+<div class="table-responsive mb-5">
+    <table class="table table-bordered text-center mb-0">
+        <thead class="bg-secondary text-dark">
+            <tr>
+                <th>User</th>
+                <th>Product</th>
+                <th>Content</th>
+                <th>Rating</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (var review in Model.OrderByDescending(x => x.Date))
+            {
+                <tr>
+                    <td class="align-middle">@review.User.Fullname()</td>
+                    <td class="align-middle">@review.Product.Name</td>
+                    <td class="align-middle w-50">@review.Content</td>
+                    <td class="align-middle">@review.Rating.ToString("F")</td>
+                    <td class="align-middle">@review.Date.ToString("MM/dd/yyyy HH:mm")</td>
+                    <td class="align-middle">
+                        <div class="d-flex justify-content-center">
+                            <button onclick="AjaxDelete('@Url.Action("Delete", "Review", new { id = review.Id })')" class="btn btn-sm btn-primary" style="width: 32px"><i class="fa fa-times"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

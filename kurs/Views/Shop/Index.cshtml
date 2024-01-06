@@ -1,0 +1,125 @@
+﻿<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Shop</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/">Home</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Shop</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+<!-- Shop Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <!-- Shop Sidebar Start -->
+        <div class="col-lg-3 col-md-12">
+            <div class="border-bottom mb-3 pb-1">
+                <h5 class="font-weight-semi-bold mb-4">Filter by Category</h5>
+                @foreach (Category category in ViewBag.Categories)
+                {
+                    var selected = (int[])ViewBag.SelectedCategories;
+                    var _checked = selected.Contains(category.Id) ? "checked" : null;
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" name="category" data-id="@category.Id" id="category-@category.Id" @_checked>
+                        <label class="custom-control-label" for="category-@category.Id" role="button">@category.Name</label>
+                        <span class="badge border font-weight-normal">@category.ProductsCount</span>
+                    </div>
+                }
+            </div>
+            <div class="pb-1" style="margin-bottom: -16px;">
+                <h5 class="font-weight-semi-bold mb-4">Filter by Company</h5>
+                @foreach (Company company in ViewBag.Companies)
+                {
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" name="company" data-id="@company.Id" id="company-@company.Id">
+                        <label class="custom-control-label" for="company-@company.Id" role="button">@company.Name</label>
+                        <span class="badge border font-weight-normal">@company.ProductsCount</span>
+                    </div>
+                }
+            </div>
+            @foreach (TagGroup tagGroup in ViewBag.TagGroups)
+            {
+                <div class="border-top mt-3 pt-3">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by @tagGroup.Name</h5>
+                    @foreach (Tag tag in tagGroup.Tags)
+                    {
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" name="tag" data-id="@tag.Id" id="@tagGroup.Id-@tag.Id">
+                            <label class="custom-control-label" for="@tagGroup.Id-@tag.Id" role="button">@tag.Name</label>
+                            <span class="badge border font-weight-normal">@tag.ProductsCount</span>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <!-- Shop Sidebar End -->
+        <!-- Shop Product Start -->
+        <div class="col-lg-9 col-md-12">
+            <div class="row pb-1">
+                <div class="col-12 pb-1">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="Search by name" value="@ViewBag.Search">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent text-primary">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="input-group w-25 ml-4">
+                            <select name="orderBy" class="custom-select">
+                                <option value="0">Name (A-Z)</option>
+                                <option value="1">Name (Z-A)</option>
+                                <option value="2">Price Lower</option>
+                                <option value="3">Price Higher</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="products" class="row pb-1">
+
+            </div>
+        </div>
+        <!-- Shop Product End -->
+    </div>
+</div>
+<!-- Shop End -->
+@section Scripts {
+    <script>
+        var ProductsGetRequest = function() {
+            var search = $("input[name=search]").val()
+            var orderBy = $("select[name=orderBy]").val();
+            var categories = $("input[name=category]:checked").map(function () {
+                return $(this).data("id");
+            }).get()
+            var companies = $("input[name=company]:checked").map(function () {
+                return $(this).data("id");
+            }).get()
+            var tags = $("input[name=tag]:checked").map(function () {
+                return $(this).data("id");
+            }).get()
+            var data = {
+                search: search,
+                orderBy: orderBy,
+                categories: categories,
+                companies: companies,
+                tags: tags
+            }
+            console.log(data)
+            $.ajax({
+                type: "GET",
+                url: "/shop/products",
+                data: $.param(data, true),
+                success: function (res) {
+                    $("#products").html(res);
+                }
+            })
+        }
+        $(document).ready(ProductsGetRequest);
+        $("input").on("change", ProductsGetRequest);
+        $("select[name=orderBy]").on("change", ProductsGetRequest);
+    </script>
+}

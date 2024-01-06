@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+}
+@model List<Shipping>
+<div class="table-responsive mb-5">
+    <table class="table table-bordered text-center mb-0">
+        <thead class="bg-secondary text-dark">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (var tag in Model)
+            {
+                <tr>
+                    <td class="align-middle">@tag.Name</td>
+                    <td class="align-middle">@tag.Price</td>
+                    <td class="align-middle">
+                        <div class="d-flex justify-content-center">
+                            <button onclick="showInPopup('@Url.Action("Edit", "Shippings", new { id = tag.Id })', 'Edit Shipping')" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></button>
+                            <button onclick="AjaxDelete('@Url.Action("Delete", "Shippings", new { id = tag.Id })')" class="btn btn-sm btn-primary" style="width: 32px"><i class="fa fa-times"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

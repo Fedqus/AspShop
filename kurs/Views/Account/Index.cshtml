@@ -1,0 +1,262 @@
+﻿@{
+    ViewData["Title"] = "Account";
+}
+@model User
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 200px">
+        <h1 class="font-weight-semi-bold text-uppercase">Account</h1>
+    </div>
+</div>
+<!-- Page Header End -->
+<!-- Page Header Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="nav-link active" id="v-pills-dashboard-tab" data-toggle="pill" href="#v-pills-dashboard" role="tab" aria-controls="v-pills-dashboard" aria-selected="true">Dashboard</a>
+                }
+                <a class="nav-link @(!User.IsInRole("Admin") ? "active" : null)" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+                <a class="nav-link" id="v-pills-address-tab" data-toggle="pill" href="#v-pills-address" role="tab" aria-controls="v-pills-address" aria-selected="false">Address</a>
+                <a class="nav-link" id="v-pills-orders-tab" data-toggle="pill" href="#v-pills-orders" role="tab" aria-controls="v-pills-orders" aria-selected="false">Orders</a>
+                <a class="nav-link" href="/account/logout" aria-selected="false">Logout</a>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="tab-pane fade show active" id="v-pills-dashboard" role="tabpanel" aria-labelledby="v-pills-dashboard-tab">
+                        <div class="row row-cols-1 row-cols-md-3">
+                            <!-- Card for the Home link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard">Home</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Users link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/users">Users</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Orders link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/orders">Orders</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Reviews link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/reviews">Reviews</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Categories link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/categories">Categories</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Companies link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/companies">Companies</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Products link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/products">Products</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Tag Groups link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/taggroups">Tag Groups</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Tags link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/tags">Tags</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Countries link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/countries">Countries</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Cities link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/cities">Cities</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card for the Shippings link -->
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="/dashboard/shippings">Shippings</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="tab-pane fade @(!User.IsInRole("Admin") ? "show active" : null)" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="mb-3" id="profile-form"></div>
+                    <div class="mb-3" id="change-password-form"></div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-address" role="tabpanel" aria-labelledby="v-pills-address-tab">Address</div>
+                <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
+                    @if (Model.Orders.Count > 0)
+                    {
+                        <table class="table table-borderless text-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Shipping</th>
+                                    <th scope="col">Total Price</th>
+                                    <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model.Orders)
+                                {
+                                    var totalPrice = order.SubtotalPrice + order.Shipping.Price;
+                                    <tr>
+                                        <th scope="row">Order #@order.Id</th>
+                                        <td>@order.Shipping.Name</td>
+                                        <td>$@totalPrice.ToString("F")</td>
+                                        <td>
+                                            <button onclick="showInPopup('/order/details/@order.Id', 'Order #@order.Id')" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="row justify-content-md-center py-5 px-xl-5">
+                            <div class="col-md-6 col-12 py-5">
+                                <div class="text-center mb-2 pb-2">
+                                    <h2 class="section-title px-5 mb-3"><span class="px-2">Empty</span></h2>
+                                    <p>Your orders history is empty.</p>
+                                    <div>
+                                        <a href="/shop" class="btn btn-primary px-4">Shop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/account/profile",
+                success: function (res) {
+                    $("#profile-form").html(res);
+                }
+            })
+            $.ajax({
+                type: "GET",
+                url: "/account/changepassword",
+                success: function (res) {
+                    $("#change-password-form").html(res);
+                }
+            })
+            $.ajax({
+                type: "GET",
+                url: "/account/address",
+                success: function (res) {
+                    $("#v-pills-address").html(res);
+                }
+            })
+        })
+        ProfilePost = function (form) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#profile-form").html(res);
+                }
+            });
+            return false;
+        }
+        ChangePasswordPost = function (form) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#change-password-form").html(res);
+                }
+            });
+            return false;
+        }
+        AddressPost = function (form) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#v-pills-address").html(res);
+                }
+            });
+            return false;
+        }
+    </script>
+}

@@ -1,0 +1,135 @@
+﻿@model CartModel
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/shop">Shop</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Shopping Cart</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+<!-- Cart Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div id="cart-table" class="col-lg-8 table-responsive mb-5">
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-secondary mb-4">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Shipping</h4>
+                </div>
+                <div class="card-body py-2">
+                    @foreach (Shipping shipping in ViewBag.Shippings)
+                    {
+                        var _checked = Model.Shipping.Id == shipping.Id ? "checked" : string.Empty;
+                        <div class="d-flex my-3">
+                            <input type="radio" data-shipping-id="@shipping.Id" name="shipping" @_checked />
+                            <h6 class="font-weight-medium ml-3 mb-0">@shipping.Name</h6>
+                        </div>                        
+                    }
+                </div>
+            </div>
+            <div id="cart-summary" class="card border-secondary mb-5">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->
+@section Scripts {
+    <script>
+        CartProductUpdate = function (productId, amount) {
+            $.ajax({
+                type: "GET",
+                url: "/cart/update",
+                data: {
+                    productId: productId,
+                    amount: amount
+                },
+                success: function(){
+                    TableGetRequest()
+                    SummaryGetRequest()
+                }
+            })
+        }
+        CartShippingUpdate = function (shippingId) {
+            $.ajax({
+                type: "GET",
+                url: "/cart/updateshipping",
+                data: {
+                    shippingId: shippingId
+                },
+                success: function(){
+                    SummaryGetRequest()
+                }
+            })
+        }
+        CartProductDelete = function (productId) {
+            $.ajax({
+                type: "GET",
+                url: "/cart/delete",
+                data: {
+                    productId: productId
+                },
+                success: function(){
+                    TableGetRequest()
+                    SummaryGetRequest()
+                    $(document).trigger("cartUpdate")
+                }
+            })
+        }
+        TableGetRequest = function(){
+            $.ajax({
+                type: "GET",
+                url: "/cart/table",
+                success: function(res){
+                    $("#cart-table").html(res)
+                    initQuantityPlusMinus()
+                    $(".quantity input").on("change", function () {
+                        var productId = $(this).attr("data-product-id")
+                        var amount = parseFloat($(this).val())
+                        CartProductUpdate(productId, amount)
+                    })
+                }
+            })
+        }
+        SummaryGetRequest = function () {
+            $.ajax({
+                type: "GET",
+                url: "/cart/summary",
+                success: function(res){
+                    $("#cart-summary").html(res)
+                }
+            })
+        }
+        var MakeOrder = function () {
+            $.ajax({
+                type: "GET",
+                url: "/order/make",
+                success: function () {
+                    location.href = "/cart/thankyou"
+                },
+                error: function (xhr) {
+                    $.notify(xhr.responseText, {
+                        globalPosition: 'top center',
+                        showDuration: 700,
+                        className: "error"
+                    });
+                }
+            })
+        }
+
+        $(document).ready(TableGetRequest)
+        $(document).ready(SummaryGetRequest)
+        $(document).ready(function(){
+            $("input:radio[name=shipping]").on("change", function(){
+                if (this.checked) {
+                    CartShippingUpdate($(this).attr("data-shipping-id"))
+                }
+            })
+        })
+
+    </script>
+}

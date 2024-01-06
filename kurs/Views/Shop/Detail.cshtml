@@ -1,0 +1,197 @@
+﻿@model Product
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Shop Detail</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/shop">Shop</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Shop Detail</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+<!-- Shop Detail Start -->
+<div class="container-fluid py-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-5 pb-5">
+            <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner border">
+                    @foreach (var item in Model.Images.Select((x, i) => new { image = x, index = i }))
+                    {
+                        var active = item.index == 0 ? "active" : string.Empty;
+                        <div class="carousel-item @active">
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <img class="embed-responsive-item w-100" style="object-fit: cover;" src="@item.image.ImagePath" alt="Image">
+                            </div>
+                        </div>
+                    }
+                </div>
+                <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+                    <i class="fa fa-2x fa-angle-left text-dark"></i>
+                </a>
+                <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+                    <i class="fa fa-2x fa-angle-right text-dark"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-7 pb-5">
+            <h3 class="font-weight-semi-bold">@Model.Name</h3>
+            <div class="d-flex mb-3">
+                <div class="rating-stars mr-2">
+                    <input value="@Model.Rating" max="5" disabled />
+                </div>
+                <small class="pt-1">(@Model.ReviewsCount Reviews)</small>
+            </div>
+            <h3 class="font-weight-semi-bold mb-4">$@Model.Price.ToString("F")</h3>
+            <p class="mb-4">@Model.Description</p>
+            <div class="d-flex align-items-center mb-4 pt-2">
+                <div class="input-group quantity mr-3" style="width: 130px;">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary btn-minus">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <input id="product-amount" type="text" min="1" class="form-control bg-secondary text-center" value="1" disabled>
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary btn-plus">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <button onclick='AddToCart(@Model.Id, $("#product-amount").val()); $("#product-amount").val(1);' class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="nav nav-tabs justify-content-center border-secondary mb-4">
+                <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
+                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (@Model.ReviewsCount)</a>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-pane-1">
+                    <h4 class="mb-3">Product Description</h4>
+                    <p>@Model.Description</p>
+                </div>
+                <div class="tab-pane fade" id="tab-pane-2">
+                    <h4 class="mb-3">Additional Information</h4>
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item px-0">
+                                    Category: @Model.Category.Name
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Company: @Model.Company.Name
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Tags: @string.Join(", ", Model.Tags.Select(x => x.Tag.Name))
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Amount: @Model.Amount
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-pane-3">
+                    <div class="row">
+                        <div id="reviews" class="col-md-6">
+
+                        </div>
+                        <div id="leave-review" class="col-md-6">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Shop Detail End -->
+<!-- Products Start -->
+<div class="container-fluid py-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">You May Also Like</span></h2>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="owl-carousel related-carousel">
+                @foreach (Product product in ViewBag.RecommendedProducts)
+                {
+                    <div class="card product-item border-0">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border embed-responsive embed-responsive-1by1 p-0">
+                            <img class="img-fluid w-100 embed-responsive-item" style="object-fit: cover" src="@product.Images.First().ImagePath" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">@product.Name</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>$@product.Price.ToString("F")</h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a asp-action="detail" asp-controller="shop" asp-route-id="@product.Id" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                            <button onclick="AddToCart(@product.Id, 1)" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Products End -->
+@section Scripts {
+    <script>
+        ReviewSendGetRequest = function(){
+            var productId = window.location.href.split("/").pop()
+            $.ajax({
+                type: "GET",
+                url: "/review/send",
+                data: {
+                    productId: productId
+                },
+                success: function(res){
+                    $("#leave-review").html(res)
+                    initRatingStars();
+                }
+            })
+        }
+        ProductReviewsGetRequest = function(){
+            var productId = window.location.href.split("/").pop()
+            $.ajax({
+                type: "GET",
+                url: "/review/productreviews",
+                data: {
+                    productId: productId
+                },
+                success: function(res){
+                    $("#reviews").html(res)
+                    initRatingStars();
+                }
+            })
+        }
+        ReviewSendPostRequest = function (form) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $("#leave-review").html(res)
+                    initRatingStars();
+                    if (!$("div.validation-summary-errors").data()) {
+                        ProductReviewsGetRequest()
+                        ReviewSendGetRequest()
+                    }
+                }
+            });
+            return false;
+        }
+        $(document).ready(ReviewSendGetRequest)
+        $(document).ready(ProductReviewsGetRequest)
+    </script>
+}

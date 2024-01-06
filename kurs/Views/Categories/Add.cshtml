@@ -1,0 +1,21 @@
+﻿@using kurs.Models.Forms;
+@{
+
+    Layout = null;
+}
+@model CategoryForm
+<form asp-action="Add" asp-controller="Categories" enctype="multipart/form-data" onsubmit="return AjaxPost(this);">
+    <div asp-validation-summary="All" hidden></div>
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <input type="text" asp-for="Name" class="form-control" placeholder="Name" aria-label="Name">
+    </div>
+    <span asp-validation-for="Image" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <div class="custom-file">
+            <input type="file" asp-for="Image" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+            <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Add</button>
+</form>

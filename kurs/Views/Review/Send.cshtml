@@ -1,0 +1,43 @@
+﻿@using kurs.Models.Forms;
+@{
+    Layout = null;
+}
+@model ReviewSendForm
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <h4 class="mb-4">Leave a review</h4>
+    <form asp-action="send" asp-controller="review" onsubmit="return ReviewSendPostRequest(this);">
+        <div asp-validation-summary="All" hidden></div>
+        <span asp-validation-for="Rating" class="text-danger"></span>
+        <div class="d-flex my-3">
+            <p class="mb-0 mr-2">Your Rating * :</p>
+            <div class="rating-stars">
+                <input asp-for="Rating" max="5" />
+            </div>
+        </div>
+        <span asp-validation-for="Content" class="text-danger"></span>
+        <div class="form-group">
+            <label for="message">Your Review *</label>
+            <textarea asp-for="Content" id="message" cols="30" rows="5" class="form-control"></textarea>
+        </div>
+        <input asp-for="ProductId" value="@Model.ProductId" hidden/>
+        <div class="form-group mb-0">
+            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+        </div>
+    </form>
+}
+else
+{
+    <div class="row justify-content-md-center py-5 px-xl-5">
+        <div class="col-md-6 col-12 py-5">
+            <div class="text-center mb-2 pb-2">
+                <h2 class="section-title px-5 mb-3"><span class="px-2">Authorization</span></h2>
+                <p>To leave a review, you must first log in.</p>
+                <div>
+                    <a href="/account/login" class="btn btn-primary px-4">Login</a>
+                    <a href="/account/register" class="btn btn-primary px-4">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

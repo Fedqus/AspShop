@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Countries - Dashboard";
+}
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Dashboard</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/account">Account</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0"><a href="/dashboard">Dashboard</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Countries</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+<div class="container-fluid d-flex">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Field</span>
+        </div>
+        <select class="custom-select" name="field">
+            <option value="0">Name</option>
+        </select>
+        <input type="text" name="search" class="form-control w-50" placeholder="Search">
+        <div class="input-group-append">
+            <span class="input-group-text bg-transparent text-primary">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+    </div>
+    <button onclick="showInPopup('@Url.Action("Add", "Countries")', 'New Country')" class="btn btn-primary ml-2" style="width: 9em;">Add New</button>
+</div>
+<!-- Cart Start -->
+<div id="container" class="container-fluid pt-5">
+</div>
+<!-- Cart End -->
+@section Scripts {
+    <script>
+        $(document).ready(function () { loadTable("/Countries/Table") })
+        $("#form-modal").on("success", function () { loadTable("/Countries/Table") })
+        $("[name=field]").on("change", function () { loadTable("/Countries/Table") })
+        $("[name=search]").on("change", function () { loadTable("/Countries/Table") })
+    </script>
+}

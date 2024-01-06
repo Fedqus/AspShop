@@ -1,0 +1,30 @@
+﻿@model Tuple<float, float>
+@{
+    Layout = null;
+    var subtotal = Model.Item1;
+    var shippingPrice = Model.Item2;
+    var total = subtotal + shippingPrice;
+}
+<div class="card-header bg-secondary border-0">
+    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+</div>
+<div class="card-body">
+    <div class="d-flex justify-content-between mb-3 pt-1">
+        <h6 class="font-weight-medium">Subtotal</h6>
+        <h6 class="font-weight-medium">$@subtotal.ToString("F")</h6>
+    </div>
+    <div class="d-flex justify-content-between">
+        <h6 class="font-weight-medium">Shipping</h6>
+        <h6 class="font-weight-medium">$@shippingPrice.ToString("F")</h6>
+    </div>
+</div>
+<div class="card-footer border-secondary bg-transparent">
+    <div class="d-flex justify-content-between mt-2">
+        <h5 class="font-weight-bold">Total</h5>
+        <h5 class="font-weight-bold">$@total.ToString("F")</h5>
+    </div>
+    @{
+        var disabled = ViewBag.Muted ? "disabled" : null;
+    }
+    <button onclick="MakeOrder();" class="btn btn-block btn-primary my-3 py-3" @disabled>Checkout</button>
+</div>

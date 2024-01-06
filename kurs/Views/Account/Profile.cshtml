@@ -1,0 +1,27 @@
+﻿@using kurs.Models.Forms;
+@{
+    Layout = null;
+}
+@model ProfileForm
+<form asp-action="Profile" asp-controller="Account" onsubmit="return ProfilePost(this);">
+    <div asp-validation-summary="All" hidden></div>
+    <div class="row align-items-end mb-3">
+        <div class="col pr-2">
+            <span asp-validation-for="Firstname" class="text-danger"></span>
+            <div class="input-group">
+                <input type="text" asp-for="Firstname" class="form-control" placeholder="Firstname" aria-label="Firstname">
+            </div>
+        </div>
+        <div class="col pl-2">
+            <span asp-validation-for="Lastname" class="text-danger"></span>
+            <div class="input-group">
+                <input type="text" asp-for="Lastname" class="form-control" placeholder="Lastname" aria-label="Lastname">
+            </div>
+        </div>
+    </div>
+    <span asp-validation-for="Email" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <input type="text" asp-for="Email" class="form-control" placeholder="Email" aria-label="Email" disabled>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+</form>

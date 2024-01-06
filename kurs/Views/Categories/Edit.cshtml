@@ -1,0 +1,23 @@
+﻿@using kurs.Models.Forms;
+@{
+
+    Layout = null;
+}
+@model CategoryForm
+<form asp-action="Edit" asp-controller="Categories" asp-route-id="@Model.Id" onsubmit="return AjaxPost(this);">
+    <div asp-validation-summary="All" hidden></div>
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <input type="text" asp-for="Name" class="form-control" placeholder="Name" aria-label="Name">
+    </div>
+    <span asp-validation-for="Image" class="text-danger"></span>
+    <div class="input-group mb-1">
+        <div class="custom-file">
+            <input type="file" asp-for="Image" class="custom-file-input" id="inputGroupFile01">
+            <label class="custom-file-label" for="inputGroupFile01" aria-describedby="inputGroupFileAddon01">Choose image</label>
+        </div>
+    </div>
+    <div class="text-muted mb-3">If the image is not selected, it will not change.</div>
+
+    <button type="submit" class="btn btn-primary btn-block">Save</button>
+</form>
